@@ -85,11 +85,15 @@ export default {
         date: '2019-07-30',
         name: 'dawda@dada.com',
         address: 'false'
+      },{
+        date: '2019-07-30',
+        name: 'dawda@dada.com',
+        address: 'false'
       }],
       loading: false,
       fits: 'fill',
       url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      route:''
+      route:'http://127.0.0.1:5000/emails'
     }
   },
   computed:{
@@ -103,10 +107,19 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.formInline.fastName,this.formInline.lastName,this.formInline.domain)
+      // console.log(this.formInline.fastName,this.formInline.lastName,this.formInline.domain);
       this.loading = true;
-      axios.get(this.route).then(function (response) {
-              this.tableData = response.data.tableData;
+      let formData = new FormData();
+      formData.append('fastName',this.formInline.fastName);
+      formData.append('lastName',this.formInline.lastName);
+      formData.append('domain',this.formInline.domain)
+      var header = "Content-Type: application/x-www-form-urlencoded;charset=utf-8";
+      axios.post(this.route, formData, header)
+              .then((response) => {
+              this.tableData = [];
+              response.data.forEach((data)=>{
+                this.tableData.push(data)
+              });
               this.loading = false;
               this.$message({
                 message: '完了しました',
@@ -129,7 +142,7 @@ export default {
     },
     open() {
       this.$alert('ターゲットの苗字と名前とドメイン名を入力してくだい、' +
-              '検索終わるまで数分間時間かかる場合もありますので、ご了承ください', 'このツールの使い方', {
+              '検索終わるまで数分間時間かかる場合もありますので、ご了承ください。また、正解率は今50%くらいです', 'このツールの使い方', {
         confirmButtonText: '閉じる',
         // callback: action => {
         //   this.$message({
