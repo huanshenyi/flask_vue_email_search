@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data() {
@@ -87,7 +88,8 @@ export default {
       }],
       loading: false,
       fits: 'fill',
-      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      route:''
     }
   },
   computed:{
@@ -102,7 +104,19 @@ export default {
   methods: {
     onSubmit() {
       console.log(this.formInline.fastName,this.formInline.lastName,this.formInline.domain)
-      this.loading = true
+      this.loading = true;
+      axios.get(this.route).then(function (response) {
+              this.tableData = response.data.tableData;
+              this.loading = false;
+              this.$message({
+                message: '完了しました',
+                type: 'success'
+              });
+      }).catch((err)=>{
+             alert(`みつかりません\n ${err.response}`)
+             //console.log(err.response)
+             this.loading = false;
+      })
     },
     deleteInfo(){
       this.formInline.fastName = "";
