@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container style="height: 600px; border: 1px solid #eee">
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
         <template>
@@ -9,15 +9,15 @@
       </el-header>
 
       <el-main>
-        <el-main>
+
           <el-row :gutter="24" style="margin-top: 10px">
             <el-col :span="6" :offset="6">
-              <el-input v-model="formInline.fastName" placeholder="苗字" clearable>
+              <el-input v-model="formInline.fastName" placeholder="苗字(かな入力の方が精度が高い)" clearable>
                 <template slot="prepend">F</template>
               </el-input>
             </el-col>
             <el-col :span="6">
-              <el-input v-model="formInline.lastName" placeholder="名前" clearable>
+              <el-input v-model="formInline.lastName" placeholder="名前(かな入力の方が精度が高い)" clearable>
                 <template slot="prepend">L</template>
               </el-input>
             </el-col>
@@ -36,13 +36,14 @@
           </el-col>
           <el-col :span="2">&#12288;</el-col>
           <el-col :span="11" >
-            <el-button type="warning" plain @click="deleteInfo" style="padding:15px 100px">リッセト</el-button>
+            <el-button type="warning" plain @click="deleteInfo" style="padding:15px 100px">リセット</el-button>
           </el-col>
         </el-row>
-        </el-main>
+
         <el-row :gutter="20" style="margin-top: 5px" v-loading="loading" element-loading-text="コーヒー飲んで来ても大丈夫ですよ">
           <el-col :span="4"><div>&#12288;</div></el-col>
           <el-col :span="16">
+            <el-main style="height: 310px; border: 1px solid #eee">
             <el-table
                     :data="tableData"
                     style="width: 100%">
@@ -61,10 +62,14 @@
                       label="存在確認">
               </el-table-column>
             </el-table>
+            </el-main>
           </el-col>
           <el-col :span="4">&#12288;</el-col>
         </el-row>
       </el-main>
+      <el-footer style="height: 40px">
+        <el-tag>© 2019/7/31 (v1.0)</el-tag>
+      </el-footer>
     </el-container>
   </el-container>
 </template>
@@ -83,11 +88,7 @@ export default {
       },
       tableData: [{
         date: '2019-07-30',
-        name: 'dawda@dada.com',
-        address: 'false'
-      },{
-        date: '2019-07-30',
-        name: 'dawda@dada.com',
+        name: 'test@bell-face.com',
         address: 'false'
       }],
       loading: false,
@@ -112,7 +113,7 @@ export default {
       let formData = new FormData();
       formData.append('fastName',this.formInline.fastName);
       formData.append('lastName',this.formInline.lastName);
-      formData.append('domain',this.formInline.domain)
+      formData.append('domain',this.formInline.domain);
       var header = "Content-Type: application/x-www-form-urlencoded;charset=utf-8";
       axios.post(this.route, formData, header)
               .then((response) => {
